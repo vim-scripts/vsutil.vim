@@ -467,3 +467,41 @@ function! ExpandDosEnvVar(str,...)
 	endwhile
 	return str
 endfunction
+
+function! PadField(just,size,str,...)
+	if a:0
+		let pad=a:1
+	else
+		let pad=' '
+	endif
+	let len=strlen(a:str)
+	if len >= a:size
+		return ''
+	endif
+	let just=tolower(a:just[0])
+	let just=just == 'l' ? -1 : just == 'r' ? 1 : 0
+	let newstr=a:str
+	while len < a:size
+		if just == -1
+			let newstr=newstr.pad
+		elseif just == 1
+			let newstr=pad.newstr
+		else
+			let newstr=newstr.pad
+			let len=len+1
+			if len < a:size
+				let newstr=pad.newstr
+			endif
+		endif
+		let len=len+1
+	endwhile
+	return newstr
+endfunction
+
+function! MaxCmdLines()
+	let svch=&ch
+	execute 'silent! set ch='.&lines
+	let newch=&ch
+	execute 'silent! set ch='.svch
+	return newch
+endfunction
