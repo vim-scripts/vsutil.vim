@@ -3,6 +3,10 @@
 " Maintainer:  Dave Silvia <dsilvia@mchsi.com>
 " Date:        8/8/2004
 "
+" Version 1.4
+" Date:        10/4/2004
+"  Added:
+"   -  g:VSUTIL, g:VSUTILMAJ, g:VSUTILMIN
 " Version 1.3
 " Date:        9/24/2004
 "  Modified:
@@ -21,6 +25,14 @@
 "   New:
 "    -  Added sorting from eval.txt example
 "    -  Added Uniq()
+
+let g:VSUTIL=1
+let g:VSUTILMAJ=1
+let g:VSUTILMIN=4
+
+" turn off C in cpoptions to allow continuation lines
+let s:saveCPO=&cpoptions
+set cpoptions-=C
 
 function! IsVimNmr(var)
 	let l:omega=matchend(a:var,'^\%[0x]\d*')
@@ -505,3 +517,5 @@ function! MaxCmdLines()
 	execute 'silent! set ch='.svch
 	return newch
 endfunction
+
+let &cpoptions=s:saveCPO
