@@ -3,6 +3,13 @@
 " Maintainer:  Dave Silvia <dsilvia@mchsi.com>
 " Date:        8/8/2004
 "
+" Version 1.3
+" Date:        9/24/2004
+"  Modified:
+"   -  IsStrLit() now returns 1 for single
+"      quotes and 2 for double quotes
+"  New:
+"   -  Added ExpandDosEnvVar()
 "
 " Version 1.2
 " Date:        9/18/2004
@@ -42,7 +49,7 @@ endfunction
 function! IsStrLit(var)
 	let sglQuote=match(a:var,"^'") != -1 && match(a:var,"'$") != -1
 	let dblQuote=match(a:var,'^"') != -1 && match(a:var,'"$') != -1
-	return (sglQuote || dblQuote)
+	return sglQuote ? 1 : dblQuote ? 2 : 0
 endfunction
 
 " returns 1 if valid and exists, -1 if valid and doesn't exist, 0 if not valid
@@ -434,4 +441,29 @@ function! RelativePath(path1,path2)
 		let fname="../".fname
 	endwhile
 	return expand(fname)
+endfunction
+
+" Returns DOS environment variables of the form %VARNAME% expanded.
+" Can contain any number of variables in any string.
+" If quoted, quotes are returned unless optional argument is included.
+" If variable is not in the environment available to Vim, $VARNAME is
+" returned.
+function! ExpandDosEnvVar(str,...)
+	if a:0
+		if IsStrLit(a:str)
+			let arglen=strlen(a:str)-2
+			let str=strpart(a:str,1,arglen)
+		else
+			let str=a:str
+		endif
+	else
+		let str=a:str
+	endif
+	let envVarStrt=match(str,'%\(\w*\)%')
+	while envVarStrt != -1
+		let envVarEnd=matchend(str,'%\(\w*\)%')
+		let str=strpart(str,0,envVarStrt).expand(substitute(strpart(str,envVarStrt,envVarEnd-envVarStrt),'%\(\w*\)%','$\1','')).strpart(str,envVarEnd)
+		let envVarStrt=match(str,'%\(\w*\)%')
+	endwhile
+	return str
 endfunction

@@ -302,10 +302,11 @@ font-family:"Cordia New";font-weight:normal;'>0</span></p>
 <p class=DispTxt>&nbsp;</p>
 
 <p class=DispTxt><span style='font-family:"Arial Black";color:maroon'>IsStrLit</span>
-returns Boolean 0 or 1 based on whether or not its argument is enclosed in
-matching quotes.  This is handy for
-removing quotes where they’re not wanted, adding them when they’re wanted, or
-telling whether or not you need to dereference.</p>
+returns Boolean zero or non-zero based on whether or not its argument is
+enclosed in matching quotes.  This is
+handy for removing quotes where they’re not wanted, adding them when they’re
+wanted, or telling whether or not you need to dereference.  If literal is enclosed in double quotes, 2
+is returned, if in single quotes, 1 is returned.</p>
 
 <p class=DispTxt>&nbsp;</p>
 
@@ -316,9 +317,8 @@ which probably doesn’t belong here, but here it is for now at least, returns
 <p class=DispTxt>&nbsp;</p>
 
 <p class=DispTxt><span style='font-family:"Arial Black";color:maroon'>RGBtoHex</span>
-returns the hex of a 0-255 RGB value. 
-This was written as part of a response to a posting and I’ve just kept
-it around for general purposes.</p>
+returns the hex of a 0-255 RGB value.  This was written as part of a response to a posting and I’ve just
+kept it around for general purposes.</p>
 
 <p class=DispTxt>&nbsp;</p>
 
@@ -522,8 +522,8 @@ lines (by Robert Webb)’ for details.</p>
 <p class=DispTxt>&nbsp;</p>
 
 <p class=DispTxt><span style='font-family:"Arial Black";color:maroon'>Uniq()</span>
-is a function that compares adjacent lines in a file and if they are equal, deletes
-one. </p>
+is a function that compares adjacent lines in a file and if they are equal,
+deletes one. </p>
 
 <p class=CmdTxt>Uniq(<span style='color:#339966'>strtline</span>,<span
 style='color:#339966'>endline</span>)</p>
@@ -577,14 +577,14 @@ str1 and str2.</p>
 
 <p class=CmdDesc>echo &quot;offset=&quot;.b:offset.&quot; len=&quot;.b:len</p>
 
-<p class=CmdDesc>echo &quot;substr &lt;&quot;.strpart(str1,b:offset,b:len).&quot;&gt;&quot;</p>
+<p class=CmdDesc>echo &quot;substr
+&lt;&quot;.strpart(str1,b:offset,b:len).&quot;&gt;&quot;</p>
 
 <p class=CmdDesc>call Substrmatch(str1,str2,'b:offset','b:len',b:offset+1)</p>
 
 <p class=CmdDesc>echo &quot;offset=&quot;.b:offset.&quot; len=&quot;.b:len</p>
 
-<p class=CmdDesc>echo &quot;substr
-&lt;&quot;.strpart(str1,b:offset,b:len).&quot;&gt;&quot;</p>
+<p class=CmdDesc>echo &quot;substr &lt;&quot;.strpart(str1,b:offset,b:len).&quot;&gt;&quot;</p>
 
 <p class=CmdDesc>&nbsp;</p>
 
@@ -668,6 +668,107 @@ for ‘current dir’ and ‘current file dir’ respectively.</p>
 <p class=CmdDesc>Relative to &lt;/Vim/vimfiles/plugin/array.vim&gt;</p>
 
 <p class=CmdDesc>Relative Path &lt;.\vsutil.vim&gt;</p>
+
+<p class=CmdDesc>&nbsp;</p>
+
+<span style='font-size:10.0pt;font-family:"Arial Black";
+color:maroon;'><br clear=all style='page-break-before:always'>
+</span>
+
+<p class=DispTxt><span style='font-family:"Arial Black";color:maroon'>ExpandDosEnvVar()</span>
+is a function that expands environment variables of the form <b><span
+style='color:#333399'>%VARNAME%</span></b>.</p>
+
+<p class=CmdTxt>ExpandDosEnvVar(<span style='color:#339966'>str</span><span
+style='color:windowtext'>[</span>,<span style='color:#339966'>remove_enclosing_quote</span><span
+style='color:windowtext'>]</span>)</p>
+
+<p class=DispTxt>&nbsp;</p>
+
+<p class=DispTxt><b><span style='color:green'>str</span></b> contains <b><span
+style='color:#333399'>DOS</span></b> style environment variables for
+expansion.  It is returned as passed
+except that any <b><span style='color:#333399'>%VARNAME%</span></b> is expanded
+to its environment value.  If the
+optional argument is included, opening and closing quote characters are
+removed, while any that are embedded are retained.  If the variable value is not available in <b>Vim</b>’s
+environment, <b><span style='color:#333399'>$VARNAME</span></b> is returned.</p>
+
+<p class=DispTxt>&nbsp;</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;'%MuPAD_PRO_300%'&quot;)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;'%MuPAD_PRO_300%'&quot;,1)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar('&quot;%MuPAD_PRO_300%&quot;')</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar('&quot;%MuPAD_PRO_300%&quot;',1)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar('&quot;%MuPAD_PRO_300% \&quot;with
+embedded quotes\&quot;&quot;')</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar('&quot;%MuPAD_PRO_300% \&quot;with embedded
+quotes\&quot;&quot;',1)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;'%MuPAD_PRO_300% \&quot;with
+embedded quotes\&quot;'&quot;)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;'%MuPAD_PRO_300% \&quot;with
+embedded quotes\&quot;'&quot;,1)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar('%MuPAD_PRO_300%')</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar('%MuPAD_PRO_300%',1)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;Microsoft's Platform SDK:
+%_PSDKLIB% and %_PSDKLIB%\\IA64&quot;)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;Microsoft's Platform SDK:
+%_PSDKLIB% and %_PSDKLIB%\\IA64&quot;,1)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;'%MuPAD_PRO_300% %NULLA%'&quot;)</p>
+
+<p class=CmdDesc>echo ExpandDosEnvVar(&quot;'%MuPAD_PRO_300% %NULLA%'&quot;,1)</p>
+
+<p class=CmdDesc>&nbsp;</p>
+
+<p class=CmdDesc>'C:\mathematics\SciFace\MuPAD Pro 3.0'</p>
+
+<p class=CmdDesc>C:\mathematics\SciFace\MuPAD Pro 3.0</p>
+
+<p class=CmdDesc>&quot;C:\mathematics\SciFace\MuPAD Pro 3.0&quot;</p>
+
+<p class=CmdDesc>C:\mathematics\SciFace\MuPAD Pro 3.0</p>
+
+<p class=CmdDesc>&quot;C:\mathematics\SciFace\MuPAD Pro 3.0 \&quot;with
+embedded quotes\&quot;&quot;</p>
+
+<p class=CmdDesc>C:\mathematics\SciFace\MuPAD Pro 3.0 \&quot;with embedded
+quotes\&quot;</p>
+
+<p class=CmdDesc>'C:\mathematics\SciFace\MuPAD Pro 3.0 &quot;with embedded
+quotes&quot;'</p>
+
+<p class=CmdDesc>C:\mathematics\SciFace\MuPAD Pro 3.0 &quot;with embedded
+quotes&quot;</p>
+
+<p class=CmdDesc>C:\mathematics\SciFace\MuPAD Pro 3.0</p>
+
+<p class=CmdDesc>C:\mathematics\SciFace\MuPAD Pro 3.0</p>
+
+<p class=CmdDesc>Microsoft's Platform SDK: C:\Software Design and
+Programming\Microsoft\Platform SDK\lib and C:\Software Design and
+Programming\Microsoft\Platform SDK\lib\IA64</p>
+
+<p class=CmdDesc>Microsoft's Platform SDK: C:\Software Design and
+Programming\Microsoft\Platform SDK\lib and C:\Software Design and
+Programming\Microsoft\Platform SDK\lib\IA64</p>
+
+<p class=CmdDesc>'C:\mathematics\SciFace\MuPAD Pro 3.0 $NULLA'</p>
+
+<p class=CmdDesc>C:\mathematics\SciFace\MuPAD Pro 3.0 $NULLA</p>
+
+<p class=DispTxt>&nbsp;</p>
 
 <p class=DispTxt>&nbsp;</p>
 
