@@ -530,6 +530,147 @@ style='color:#339966'>endline</span>)</p>
 
 <p class=DispTxt>&nbsp;</p>
 
+<span style='font-size:10.0pt;font-family:"Arial Black";
+color:maroon;'><br clear=all style='page-break-before:always'>
+</span>
+
+<p class=DispTxt><span style='font-family:"Arial Black";color:maroon'>Substrmatch()</span>
+is a function that compares 2 strings and finds the first longest occurrence of
+one in the other. </p>
+
+<p class=CmdTxt>Substrmatch(<span style='color:#339966'>str1</span>,<span
+style='color:#339966'>str2</span>,<span style='color:#339966'>offset</span>,<span
+style='color:#339966'>len</span>,<span style='color:#339966'>…</span>)</p>
+
+<p class=DispTxt>&nbsp;</p>
+
+<p class=DispTxt>Str2 is searched for in str1, if found, the offset and len of
+the match are placed in the passed variables. 
+If optional arguments are specified they are the start of the search in
+str1 and str2.</p>
+
+<p class=DispTxt>The passed offset variable contains –1 if no match is found</p>
+
+<p class=CmdDesc>&nbsp;</p>
+
+<p class=CmdDesc>let str1=”this matches, this matches, too.  You see, it matches, too!”</p>
+
+<p class=CmdDesc>let str2=”matches, too”</p>
+
+<p class=CmdDesc>call Substrmatch(str1,str2,’b:offset’,’b:len’)</p>
+
+<p class=CmdDesc>echo “offset=”.b:offset.” len=”.b:len</p>
+
+<p class=CmdDesc>echo ”substr &lt;”. strpart(str1,b:offset,b:len).”&gt;”</p>
+
+<p class=CmdDesc>call Substrmatch(str1,str2,’b:offset’,’b:len’,b:offset+1)</p>
+
+<p class=CmdDesc>echo “offset=”.b:offset.” len=”.b:len</p>
+
+<p class=CmdDesc>echo ”substr &lt;”. strpart(str1,b:offset,b:len).”&gt;”</p>
+
+<p class=CmdDesc>let str1=&quot;this matches, and this matches.  You see, it matches!&quot;</p>
+
+<p class=CmdDesc>let str2=&quot;matches, too&quot;</p>
+
+<p class=CmdDesc>call Substrmatch(str1,str2,'b:offset','b:len')</p>
+
+<p class=CmdDesc>echo &quot;offset=&quot;.b:offset.&quot; len=&quot;.b:len</p>
+
+<p class=CmdDesc>echo &quot;substr &lt;&quot;.strpart(str1,b:offset,b:len).&quot;&gt;&quot;</p>
+
+<p class=CmdDesc>call Substrmatch(str1,str2,'b:offset','b:len',b:offset+1)</p>
+
+<p class=CmdDesc>echo &quot;offset=&quot;.b:offset.&quot; len=&quot;.b:len</p>
+
+<p class=CmdDesc>echo &quot;substr
+&lt;&quot;.strpart(str1,b:offset,b:len).&quot;&gt;&quot;</p>
+
+<p class=CmdDesc>&nbsp;</p>
+
+<p class=CmdDesc>offset=19 len=12</p>
+
+<p class=CmdDesc>substr &lt;matches, too&gt;</p>
+
+<p class=CmdDesc>offset=46 len=12</p>
+
+<p class=CmdDesc>substr &lt;matches, too&gt;</p>
+
+<p class=CmdDesc>offset=5 len=9</p>
+
+<p class=CmdDesc>substr &lt;matches, &gt;</p>
+
+<p class=CmdDesc>offset=23 len=7</p>
+
+<p class=CmdDesc>substr &lt;matches&gt;</p>
+
+<p class=DispTxt>&nbsp;</p>
+
+<span style='font-size:10.0pt;font-family:"Arial Black";
+color:maroon;'><br clear=all style='page-break-before:always'>
+</span>
+
+<p class=DispTxt><span style='font-family:"Arial Black";color:maroon'>RelativePath()</span>
+is a function that finds the relative path of one file in the path of another. </p>
+
+<p class=CmdTxt>RelativePath(<span style='color:#339966'>path1</span>,<span
+style='color:#339966'>path2</span>)</p>
+
+<p class=DispTxt>&nbsp;</p>
+
+<p class=DispTxt>The longest common component of the 2 paths is found and the
+path of the second is defined relative to that common path.  path1 may be specified as either ‘.’ or ‘%’
+for ‘current dir’ and ‘current file dir’ respectively.</p>
+
+<p class=DispTxt>&nbsp;</p>
+
+<p class=CmdDesc>let path2='c:/Vim/vimfiles/plugin/vsutil.vim'</p>
+
+<p class=CmdDesc>echo &quot;Full-qualified file path
+&lt;&quot;.path2.&quot;&gt;&quot;</p>
+
+<p class=CmdDesc>let path1='%'</p>
+
+<p class=CmdDesc>echo &quot;Relative to &lt;&quot;.path1.&quot;&gt;
+[&quot;.expand('%:p').&quot;]&quot;</p>
+
+<p class=CmdDesc>echo &quot;Relative Path
+&lt;&quot;.RelativePath(path1,path2).&quot;&gt;&quot;</p>
+
+<p class=CmdDesc>let path1='.'</p>
+
+<p class=CmdDesc>echo &quot;Relative to &lt;&quot;.path1.&quot;&gt;
+[&quot;.getcwd().&quot;]&quot;</p>
+
+<p class=CmdDesc>echo &quot;Relative Path
+&lt;&quot;.RelativePath(path1,path2).&quot;&gt;&quot;</p>
+
+<p class=CmdDesc>let path1='/Vim/vimfiles/plugin/array.vim'</p>
+
+<p class=CmdDesc>echo &quot;Relative to &lt;&quot;.path1.&quot;&gt;&quot;</p>
+
+<p class=CmdDesc>echo &quot;Relative Path
+&lt;&quot;.RelativePath(path1,path2).&quot;&gt;&quot;</p>
+
+<p class=CmdDesc>&nbsp;</p>
+
+<p class=CmdDesc>Full-qualified file path
+&lt;c:/Vim/vimfiles/plugin/vsutil.vim&gt;</p>
+
+<p class=CmdDesc>Relative to &lt;%&gt; [C:\Vim\vimfiles\testing\test2.vim]</p>
+
+<p class=CmdDesc>Relative Path &lt;..\plugin\vsutil.vim&gt;</p>
+
+<p class=CmdDesc>Relative to &lt;.&gt; [C:\Vim\vimfiles\plugin\example]</p>
+
+<p class=CmdDesc>Relative Path &lt;..\vsutil.vim&gt;</p>
+
+<p class=CmdDesc>Relative to &lt;/Vim/vimfiles/plugin/array.vim&gt;</p>
+
+<p class=CmdDesc>Relative Path &lt;.\vsutil.vim&gt;</p>
+
+<p class=DispTxt>&nbsp;</p>
+
 <p class=HeaderSep>&nbsp;</p>
 
 <p class=DispTxt>&nbsp;</p>

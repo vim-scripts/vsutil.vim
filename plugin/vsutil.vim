@@ -4,6 +4,12 @@
 " Date:        8/8/2004
 "
 "
+" Version 1.2
+" Date:        9/18/2004
+"   New:
+"    -  Added Substrmatch()
+"    -  Added RelativePath()
+"
 " Version 1.1
 "   New:
 "    -  Added sorting from eval.txt example
@@ -328,4 +334,104 @@ function! Uniq(sline,eline)
 		endif
 		let cline=line('.')
 	endwhile
+endfunction
+
+" Find longest occurrence of str2 in str1
+" Return results in offset and len.  If offset is -1, no match
+" 2 optional arguments are starting offsets for str1 & str2
+function! Substrmatch(str1,str2,offset,len,...)
+	if a:0
+		let str1Start=a:1
+		if a:0 > 1
+			let str2Start=a:2
+		else
+			let str2Start=0
+		endif
+	else
+		let str1Start=0
+		let str2Start=0
+	endif
+	let str1=strpart(a:str1,str1Start)
+	let str1len=strlen(str1)
+	let str2=strpart(a:str2,str2Start)
+	let str2len=strlen(str2)
+	let sublen=1
+	let substr2=strpart(str2,0,sublen)
+	let suboffset=stridx(str1,substr2)
+	let lastoffset=-1
+	while suboffset != -1 && sublen <= str1len && sublen <= str2len
+		let sublen=sublen+1
+		let substr2=strpart(str2,0,sublen)
+		let lastoffset=suboffset
+		let suboffset=stridx(str1,substr2)
+	endwhile
+	let {a:offset}=lastoffset+str1Start
+	let {a:len}=sublen-1
+endfunction
+
+" Call with 2 arguments.
+"   path1  path relative to
+"   path2  path of file to be converted to relative
+" E.G.:
+"   let relPath=RelativePath('/foo/bar/baz','/foo/blah/whimsey')
+" relPath is now '../../blah/whimsey'
+" Also:
+"   let relPath=RelativePath('/foo/bar/baz/hello.c','/foo/blah/whimsey')
+" relPath is now '../../blah/whimsey'
+function! RelativePath(path1,path2)
+	if a:path1 == '.'
+		let path1=getcwd()
+	elseif a:path1 == '%'
+		let path1=expand("%:p:h")
+	else
+		let path1=a:path1
+	endif
+	let path1=glob(path1)
+	let path2=glob(a:path2)
+	if path1 == '' || path2 == ''
+		return ''
+	endif
+	let path1=fnamemodify(path1,":p")
+	while !isdirectory(path1)
+		let path1=fnamemodify(path1,":h")
+	endwhile
+	let path2=fnamemodify(path2,":p")
+	let theTail=fnamemodify(path2,":t")
+	if theTail == ''
+		return ''
+	endif
+	let theHead=fnamemodify(path2,":h")
+	if theHead == path1
+		return expand('./'.theTail)
+	endif
+	if glob('c:/') != ''
+		let path1=strpart(path1,2)
+		let path2=strpart(path2,2)
+	endif
+	call Substrmatch(path1,path2,'b:offset','b:len')
+	if b:offset == -1
+		return ''
+	endif
+	let parentDir=strpart(path1,0,b:len)
+	let parentLen=strlen(parentDir)-1
+	if parentDir[parentLen] != '/' && parentDir[parentLen] != '\'
+		let parentDir=expand(parentDir.'/')
+	endif
+	let path1Len=strlen(path1)-1
+	if path1[path1Len] == '/' || path1[path1Len] == '\'
+		let path1=strpart(path1,0,path1Len)
+	endif
+	let fname=strpart(path2,b:len)
+	if (strpart(fname,1) == theTail || fname == theTail)
+		\ && expand(path1.'/') == parentDir
+		return expand('./'.theTail)
+	endif
+	while expand(path1.'/') != parentDir
+		if path1 == '/' || path1 == '\'
+			break
+		endif
+		let path1=fnamemodify(path1,":h")
+		let fname="../".fname
+	endwhile
+	return expand(fname)
 endfunction

@@ -1,5 +1,5 @@
-vsutil
-Page 1 of 3
+vsutil ver 1.2
+Page 1 of 5
 
 
 
@@ -113,10 +113,10 @@ Page 1 of 3
       Where msg    is a string
                    lvl  is 0 for normal
                            1 for warning
-                         > 1 for error
+                    > 1 for error
                         if not specified, 0 for normal
       echomsg format    <parent-script>::<functions(s)>: <message>
-      displayed in      black for normal
+      displayed in black for normal
                         red for warning
                         reverse red for error
       
@@ -137,6 +137,72 @@ Page 1 of 3
  Uniq() is a function that compares adjacent lines in a file and if they
  are equal, deletes one.
                          Uniq(strtline,endline)
+ 
+ Substrmatch() is a function that compares 2 strings and finds the first
+ longest occurrence of one in the other.
+                   Substrmatch(str1,str2,offset,len,…)
+ 
+ Str2 is searched for in str1, if found, the offset and len of the match
+ are  placed  in  the  passed  variables.   If  optional  arguments  are
+ specified they are the start of the search in str1 and str2.
+ The passed offset variable contains –1 if no match is found
+      
+      let str1=”this matches, this matches, too.  You see, it
+                   matches, too!”
+      let str2=”matches, too”
+      call Substrmatch(str1,str2,’b:offset’,’b:len’)
+      echo “offset=”.b:offset.” len=”.b:len
+      echo ”substr <”. strpart(str1,b:offset,b:len).”>”
+      call Substrmatch(str1,str2,’b:offset’,’b:len’,b:offset+1)
+      echo “offset=”.b:offset.” len=”.b:len
+      echo ”substr <”. strpart(str1,b:offset,b:len).”>”
+      let str1="this matches, and this matches.  You see, it
+                   matches!"
+      let str2="matches, too"
+      call Substrmatch(str1,str2,'b:offset','b:len')
+      echo "offset=".b:offset." len=".b:len
+      echo "substr <".strpart(str1,b:offset,b:len).">"
+      call Substrmatch(str1,str2,'b:offset','b:len',b:offset+1)
+      echo "offset=".b:offset." len=".b:len
+      echo "substr <".strpart(str1,b:offset,b:len).">"
+      
+      offset=19 len=12
+      substr <matches, too>
+      offset=46 len=12
+      substr <matches, too>
+      offset=5 len=9
+      substr <matches, >
+      offset=23 len=7
+      substr <matches>
+ 
+ RelativePath() is a function that finds the relative path of  one  file
+ in the path of another.
+                        RelativePath(path1,path2)
+ 
+ The  longest common component of the 2 paths is found and the  path  of
+ the  second  is  defined relative to that common path.   path1  may  be
+ specified as either ‘.’ or ‘%’ for ‘current dir’ and ‘current file dir’
+ respectively.
+ 
+      let path2='c:/Vim/vimfiles/plugin/vsutil.vim'
+      echo "Full-qualified file path <".path2.">"
+      let path1='%'
+      echo "Relative to <".path1."> [".expand('%:p')."]"
+      echo "Relative Path <".RelativePath(path1,path2).">"
+      let path1='.'
+      echo "Relative to <".path1."> [".getcwd()."]"
+      echo "Relative Path <".RelativePath(path1,path2).">"
+      let path1='/Vim/vimfiles/plugin/array.vim'
+      echo "Relative to <".path1.">"
+      echo "Relative Path <".RelativePath(path1,path2).">"
+      
+      Full-qualified file path <c:/Vim/vimfiles/plugin/vsutil.vim>
+      Relative to <%> [C:\Vim\vimfiles\testing\test2.vim]
+      Relative Path <..\plugin\vsutil.vim>
+      Relative to <.> [C:\Vim\vimfiles\plugin\example]
+      Relative Path <..\vsutil.vim>
+      Relative to </Vim/vimfiles/plugin/array.vim>
+      Relative Path <.\vsutil.vim>
  
 
  
